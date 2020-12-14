@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'components/transaction_list.dart';
 import 'components/transaction_form.dart';
 import 'models/transaction.dart';
+import 'dart:io';
 
 main(List<String> args) => runApp(ExpensesApp());
 
@@ -62,6 +63,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [];
+  bool _showChart = false;
 
   // =========================================== //
   // Functions
@@ -70,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     showModalBottomSheet(
       context: context,
       builder: (_) {
-        // Form de transações ~~
+        //* Form de transações ~~
         return TransactionForm(onSubmit: _addTransaction);
       },
     );
@@ -90,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
       date: date,
     );
 
-    // Alterando lista de transações ~~
+    //* Alterando lista de transações ~~
     setState(() {
       _transactions.add(newTransaction);
     });
@@ -113,49 +115,61 @@ class _MyHomePageState extends State<MyHomePage> {
   // =========================================== //
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    bool isLandscape = mediaQuery.orientation == Orientation.landscape;
+
     final appBar = AppBar(
       title: Text('Despesas Pessoais'),
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.add),
           onPressed: () => _openTransactionFormModal(context),
-        )
+        ),
+        if (isLandscape)
+          IconButton(
+            icon: Icon(_showChart ? Icons.list : Icons.bar_chart),
+            onPressed: () => setState(() => _showChart = !_showChart),
+          ),
       ],
     );
 
-    final availabeHeight = MediaQuery.of(context).size.height -
+    final availabeHeight = mediaQuery.size.height -
         appBar.preferredSize.height -
-        MediaQuery.of(context).padding.top;
+        mediaQuery.padding.top;
 
     return Scaffold(
-      // Barra Superior do App ~~
+      //* Barra Superior do App ~~
       appBar: appBar,
-      // Corpo da Aplicação ~~
+      //* Corpo da Aplicação ~~
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            // Gráfico da semana ~~
-            Container(
-              height: availabeHeight * 0.3,
-              child: Chart(recentTransaction: _recentTransaction),
-            ),
-            // Lista de transações ~~
-            Container(
-              height: availabeHeight * 0.7,
-              child: TransactionList(
-                transaction: _transactions,
-                onRemove: _removeTransaction,
+            if (_showChart || !isLandscape)
+              Container(
+                height: availabeHeight * (isLandscape ? 0.8 : 0.3),
+                child: Chart(recentTransaction: _recentTransaction),
               ),
-            ),
+
+            //* Lista de transações ~~
+            if (!_showChart || !isLandscape)
+              Container(
+                height: availabeHeight * (isLandscape ? 1 : 0.7),
+                child: TransactionList(
+                  transaction: _transactions,
+                  onRemove: _removeTransaction,
+                ),
+              ),
           ],
         ),
       ),
-      // Botão para adicionar transação ~~
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _openTransactionFormModal(context),
-      ),
+      //* Botão para adicionar transação ~~
+      floatingActionButton: Platform.isIOS
+          ? Container()
+          : FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () => _openTransactionFormModal(context),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

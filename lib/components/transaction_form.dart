@@ -55,64 +55,74 @@ class _TransactionFormState extends State<TransactionForm> {
   // =========================================== //
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[
-            // Campo título ~~
-            TextField(
-              controller: _titleControler,
-              onSubmitted: (_) => _submitForm(),
-              decoration: InputDecoration(
-                labelText: 'Titulo',
-              ),
-            ),
-            // Campo valor ~~
-            TextField(
-              controller: _valueControler,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              onSubmitted: (_) => _submitForm(),
-              decoration: InputDecoration(
-                labelText: 'Valor (R\$)',
-              ),
-            ),
-            // Selecionar data ~~
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    _selectedDate == null
-                        ? 'Nenhuma data Selecionada!'
-                        : 'Data Selecionada: ${DateFormat('dd/MM/y').format(_selectedDate)}',
-                  ),
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: 10,
+            right: 10,
+            left: 10,
+            bottom: (10 + MediaQuery.of(context).viewInsets.bottom),
+          ),
+          child: Column(
+            children: <Widget>[
+              //* Campo título ~~
+              TextField(
+                controller: _titleControler,
+                onSubmitted: (_) => _submitForm(),
+                decoration: InputDecoration(
+                  labelText: 'Titulo',
                 ),
-                FlatButton(
-                  textColor: Theme.of(context).primaryColor,
-                  child: Text(
-                    'Selecionar Data',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
+              ),
+
+              //* Campo valor ~~
+              TextField(
+                controller: _valueControler,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                onSubmitted: (_) => _submitForm(),
+                decoration: InputDecoration(
+                  labelText: 'Valor (R\$)',
+                ),
+              ),
+
+              //* Selecionar data ~~
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      _selectedDate == null
+                          ? 'Nenhuma data Selecionada!'
+                          : 'Data Selecionada: ${DateFormat('dd/MM/y').format(_selectedDate)}',
                     ),
                   ),
-                  onPressed: _showDatePicker,
-                )
-              ],
-            ),
-            // Botão de confirmar transação ~~
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                RaisedButton(
-                  child: Text('Nova Transação'),
-                  color: Theme.of(context).primaryColor,
-                  textColor: Theme.of(context).textTheme.button.color,
-                  onPressed: _submitForm,
-                ),
-              ],
-            )
-          ],
+                  FlatButton(
+                    textColor: Theme.of(context).primaryColor,
+                    child: Text(
+                      'Selecionar Data',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    onPressed: _showDatePicker,
+                  )
+                ],
+              ),
+
+              //* Botão de confirmar transação ~~
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  RaisedButton(
+                    child: Text('Nova Transação'),
+                    color: Theme.of(context).primaryColor,
+                    textColor: Theme.of(context).textTheme.button.color,
+                    onPressed: _submitForm,
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
