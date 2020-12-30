@@ -16,6 +16,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // =========================================== //
+  // Declarations
+  // =========================================== //
   final List<Transaction> _transactions = [];
   bool _showChart = false;
 
@@ -69,6 +72,9 @@ class _MyHomePageState extends State<MyHomePage> {
   // =========================================== //
   @override
   Widget build(BuildContext context) {
+    // =========================================== //
+    // Build Declarations
+    // =========================================== //
     final mediaQuery = MediaQuery.of(context);
     bool isLandscape = mediaQuery.orientation == Orientation.landscape;
 
@@ -91,6 +97,9 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar.preferredSize.height -
         mediaQuery.padding.top;
 
+    // =========================================== //
+    // Widget
+    // =========================================== //
     return Scaffold(
       //* Barra Superior do App ~~
       appBar: appBar,
@@ -99,12 +108,12 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            //* Grafico
             if (_showChart || !isLandscape)
               Container(
                 height: availabeHeight * (isLandscape ? 0.8 : 0.3),
                 child: Chart(recentTransaction: _recentTransaction),
               ),
-
             //* Lista de transações ~~
             if (!_showChart || !isLandscape)
               Container(
