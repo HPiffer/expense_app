@@ -1,9 +1,13 @@
-import 'package:expenses/components/chart_bar.dart';
-import 'package:expenses/models/transaction.dart';
+import 'package:expenses/app/models/transaction.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
+import 'chart_bar.dart';
+
 class Chart extends StatelessWidget {
+  // =========================================== //
+  // Declarations
+  // =========================================== //
   final List<Transaction> recentTransaction;
 
   const Chart({
